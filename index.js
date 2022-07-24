@@ -1,39 +1,46 @@
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
-require('./src/auth');
-
-function isLoggedIn(req, res, next) {
-    req.user ? next() : res.sendStatus(401);
-}
+require('./auth');
 
 const app = express();
-app.use(session({ secret: 'cats' }));
+
+function isLoggedIn(req, res, next) {
+  req.user ? next() : res.sendStatus(401);
+}
+
+app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.get('/', (req, res) => {
-    res.send('<a href="/auth/google">Authenticate with Google</a>')
+  res.send('<a href="/auth/google">Authenticate with Google</a>');
 });
 
-app.get('/auth/google', 
-passport.authenticate('google', {scope: ['email', 'profile'] })
-);
+app.get('/auth/google',
+  passport.authenticate('google', { scope: [ 'email', 'profile' ] }
+));
 
-app.get('/google/callback',
-  passport.authenticate('google', {
+app.get( '/auth/google/callback',
+  passport.authenticate( 'google', {
     successRedirect: '/protected',
-    failureRedirect: '/auth/failure',
+    failureRedirect: '/auth/google/failure'
   })
 );
 
-app.get('/auth/failure', (req, res) => {
-    res.send('Something went wrong!')
-
+app.get('/protected', isLoggedIn, (req, res) => {
+  res.send(`Hello ${req.user.displayName}`);
 });
 
-app.get('/protected', isLoggedIn, (req, res) => {
-    res.send('HELLO');
-})
-app.listen(5000, () => console.log('Listening on port:5000'));
+app.get("/logout", (req, res) => {
+  req.logout(req.user, err => {
+    if(err) return next(err);
+    res.redirect("/");
+  });
+});
+
+app.get('/auth/google/failure', (req, res) => {
+  res.send('Failed to authenticate..');
+});
+
+app.listen(5000, () => console.log('Webserver are running in port: 5000'));
