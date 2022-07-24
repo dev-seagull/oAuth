@@ -2,6 +2,10 @@ const express = require('express');
 const passport = require('passport');
 require('./src/auth');
 
+function isLoggedIn(req, res, next) {
+    req.user ? next() : res.sendStatus(401);
+}
+
 const app = express();
 
 app.get('/', (req, res) => {
@@ -24,7 +28,7 @@ app.get('/auth/failure', (req, res) => {
 
 });
 
-app.get('/protected', (req, res) => {
+app.get('/protected', isLoggedIn, (req, res) => {
     res.send('HELLO');
 })
 app.listen(5000, () => console.log('Listening on port:5000'));
