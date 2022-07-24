@@ -6,4 +6,7 @@ app.get('/', (req, res) => {
     res.send('<a href="/auth/google">Authenticate with Google</a>')
 });
 
+app.get('/protected', (req, res) => {
+    res.send('HELLO');
+})
 app.listen(5000, () => console.log('Listening on port:5000'));
