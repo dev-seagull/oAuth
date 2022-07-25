@@ -1,0 +1,29 @@
+{
+  "name": "oauth",
+  "version": "1.0.0",
+  "description": "This is a implementation for testing oauth",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KasraAlizadeh/oAuth.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KasraAlizadeh/oAuth/issues"
+  },
+  "homepage": "https://github.com/KasraAlizadeh/oAuth#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-session": "^1.17.3",
+    "passport": "^0.6.0",
+    "passport-google-oauth2": "^0.2.0"
+  }
+}
